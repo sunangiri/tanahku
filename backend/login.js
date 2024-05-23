@@ -11,7 +11,7 @@ router.post("/login", (req, res) => {
         username,
       });
     } else {
-      return res.status(403).json({
+      return res.status(200).json({
         status: false,
       });
     }

@@ -1,25 +1,39 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const router = express.Router();
+const initializeUsers = require("./initUsers");
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    if (username == "admin" && password == "admin123") {
-      return res.status(200).json({
-        status: true,
-        username,
-      });
-    } else {
+    // Initialize users
+    const users = await initializeUsers();
+
+    // Find the user by username
+    const user = users.find((u) => u.username === username);
+    if (!user) {
       return res.status(200).json({
         status: false,
+        message: "Invalid username or password.",
       });
     }
+
+    // Validate the password
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(200).json({
+        status: false,
+        message: "Invalid username or password.",
+      });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    res.status(200).json({ status: true, token, username });
   } catch (error) {
-    return res.status(500).json({
-      status: false,
-      error,
-    });
+    res.status(500).json({ status: false, error: error.message });
   }
 });
 

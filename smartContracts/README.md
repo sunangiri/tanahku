@@ -42,14 +42,14 @@ Buat kata sandi yang kuat dan ikuti petunjuk untuk menyimpan frasa pemulihan (se
 
 2. **Buat File Smart Contract**:
    - Klik ikon `+` untuk membuat file baru.
-   - Beri nama file, misalnya `CertificateRegistry.so`.
+   - Beri nama file, misalnya `CertificateRegistry.sol`.
 
 3. **Tulis Smart Contract**:
 
 4. **Kompilasi Smart Contract**:
    - Klik ikon `Solidity Compiler`.
    - Pilih versi compiler yang sesuai (misalnya `0.8.0`).
-   - Klik `Compile CertificateRegistry.so`.
+   - Klik `Compile CertificateRegistry.sol`.
 
 5. **Deploy Smart Contract**:
    - Klik ikon `Deploy & Run Transactions`.

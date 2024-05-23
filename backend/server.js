@@ -17,7 +17,8 @@ app.use("/", updateRouter);
 app.use("/", login);
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.PORT || "0.0.0.0";
 
-app.listen(PORT, "localhost", () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running ${HOST}/${PORT}`);
 });

@@ -1,9 +1,10 @@
 const Web3 = require("web3");
 const contractAbi = require("./CertificateRegistryABI.json");
 const contractAddress = "0x3f6518844fb95cc0693bf05a0a0F144d7DEDA699";
-const privateKey = "xxx";
 const rpcUrl = "https://rpc-amoy.polygon.technology";
+require("dotenv").config();
 
+const privateKey = process.env.PRIVATE_KEY;
 const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 
 const account = web3.eth.accounts.privateKeyToAccount(privateKey);

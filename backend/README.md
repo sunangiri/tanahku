@@ -87,13 +87,3 @@ Jalankan kontainer dari image yang baru saja Anda bangun. Mappkan port 80 di hos
 docker run -dp 80:3000 --name tanahku tanahku:latest
 ```
 
-### Keterangan Tambahan
-- `sudo apt-get update`: Memperbarui daftar paket di sistem.
-- `sudo apt-get install -y ...`: Menginstal paket-paket yang diperlukan.
-- `sudo mkdir -p /etc/apt/keyrings`: Membuat direktori untuk menyimpan kunci GPG.
-- `curl -fsSL ... | sudo gpg --dearmor -o ...`: Mengunduh dan menyimpan kunci GPG Docker.
-- `echo "deb [arch=$(dpkg --print-architecture) ... | sudo tee ...`: Menambahkan repository Docker ke sumber APT.
-- `docker build -t tanahku:latest .`: Membuat image Docker dari `Dockerfile`.
-- `docker run -dp 80:3000 --name tanahku tanahku:latest`: Menjalankan kontainer dari image yang dibuat, memetakan port 80 di host ke port 3000 di kontainer, dan memberikan nama `tanahku` pada kontainer.
-
-Dengan mengikuti langkah-langkah ini, Anda akan memiliki Docker terinstal dan aplikasi Anda dideploy menggunakan Docker di VPS Linux Anda.

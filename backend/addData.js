@@ -6,10 +6,11 @@ const fs = require("fs");
 const router = express.Router();
 const { mintNFT, getTokenMetadata } = require("./web3");
 require("dotenv").config();
+const authenticateToken = require("./auth");
 
 const upload = multer({ dest: "uploads/" });
 
-router.post("/add", upload.single("file"), async (req, res) => {
+router.post("/add", authenticateToken, upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
     const name = req.body.name;

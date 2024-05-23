@@ -6,10 +6,11 @@ const fs = require("fs");
 const router = express.Router();
 const { updateTokenMetadata, getTokenMetadata } = require("./web3");
 require("dotenv").config();
+const authenticateToken = require("./auth");
 
 const upload = multer({ dest: "uploads/" });
 
-router.post("/update/:id", upload.single("file"), async (req, res) => {
+router.post("/update/:id", authenticateToken, upload.single("file"), async (req, res) => {
   try {
     const idx = req.params.id;
     const file = req.file;

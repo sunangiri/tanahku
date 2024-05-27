@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "vercel-build": "echo 'Running Vercel build script...'",
+    "build": "echo 'Running Vercel build script...'",
+    "vercel-deploy": "vercel"
   },
   "keywords": [],
   "author": "",

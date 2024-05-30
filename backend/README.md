@@ -1,3 +1,170 @@
+# REST API TANAHKU
+
+REST-API TANAHKU terintegrasi dengan smart contracts, dapat digunakan di blokchain EVM.
+
+## Daftar Isi
+
+- [Environment Variables](##environment-variables)
+- [API Endpoints](##api-endpoints)
+- [Deployment](##deployment)
+- [Lisensi](##lisensi)
+
+## Environment-Variables
+
+Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file `.env` di direktori root proyek Anda dan tambahkan variabel-variabel berikut:
+
+| Variable    | Value                                  |
+|-------------|----------------------------------------|
+| PINATA_JWT  | [pinata](https://www.pinata.cloud/)    |
+| JWT_SECRET  | risqiganteng                           |
+| PRIVATE_KEY | [MetaMask](https://metamask.io/)       |
+| HOST        | -                                      |
+| PORT        | -                                      |
+
+## API Endpoints
+
+### `/login`
+
+**Method:** POST
+
+**Response:**
+
+- **Success (200)**
+    ```json
+    {
+        "status": true,
+        "token": "xxxxxxx",
+        "username": "nailynafa"
+    }
+    ```
+- **Failed (200)**
+    ```json
+    {
+        "status": false,
+        "message": "Invalid username or password."
+    }
+    ```
+- **Error (500)**
+    ```json
+    {
+        "status": false,
+        "error": "error.message"
+    }
+    ```
+
+### `/data/:id`
+
+**Method:** GET
+
+**Response:**
+
+- **Success (200)**
+    ```json
+    {
+        "status": true,
+        "message": {
+            "tokenId": "tokenId",
+            "name": "getMetadata.name",
+            "description": "getMetadata.description",
+            "image": "getMetadata.image",
+            "urlLocation": "getMetadata.urlLocation",
+            "creator": "getMetadata.creator",
+            "createdAt": "date"
+        }
+    }
+    ```
+- **Error (500)**
+    ```json
+    {
+        "status": false,
+        "message": "Error add data"
+    }
+    ```
+    or
+    ```json
+    {
+        "status": false,
+        "message": "Internal server error",
+        "error": "error"
+    }
+    ```
+
+### `/add`
+
+**Method:** POST
+
+**Response:**
+
+- **Success (200)**
+    ```json
+    {
+        "status": true,
+        "message": {
+            "tokenId": "create",
+            "name": "getMetadata.name",
+            "description": "getMetadata.description",
+            "image": "getMetadata.image",
+            "urlLocation": "getMetadata.urlLocation",
+            "creator": "getMetadata.creator",
+            "createdAt": "date"
+        }
+    }
+    ```
+- **Error (500)**
+    ```json
+    {
+        "status": false,
+        "message": "Error add data"
+    }
+    ```
+    or
+    ```json
+    {
+        "status": false,
+        "message": "Internal server error",
+        "error": "error"
+    }
+    ```
+
+### `/update/:id`
+
+**Method:** POST
+
+**Response:**
+
+- **Success (200)**
+    ```json
+    {
+        "status": true,
+        "message": {
+            "tokenId": "idx",
+            "name": "getMetadata.name",
+            "description": "getMetadata.description",
+            "image": "getMetadata.image",
+            "urlLocation": "getMetadata.urlLocation",
+            "creator": "getMetadata.creator",
+            "createdAt": "date"
+        }
+    }
+    ```
+- **Error (500)**
+    ```json
+    {
+        "status": false,
+        "message": "Error add data"
+    }
+    ```
+    or
+    ```json
+    {
+        "status": false,
+        "message": "Internal server error",
+        "error": "error"
+    }
+    ```
+
+## Deployment
+
 ### Langkah 1: Instal Docker
 
 #### 1. Perbarui Repositori Paket
@@ -54,7 +221,7 @@ Buat file bernama `Dockerfile` di direktori proyek Anda jika belum ada. Isi file
 
 Contoh `Dockerfile` untuk aplikasi Express.js:
 ```Dockerfile
-FROM node:14
+FROM node:18
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -87,3 +254,17 @@ Jalankan kontainer dari image yang baru saja Anda bangun. Mappkan port 80 di hos
 docker run -dp 80:3000 --name tanahku tanahku:latest
 ```
 
+## LICENSE
+
+Berikut adalah contoh isi file LICENSE menggunakan MIT License:
+
+```plaintext
+MIT License
+
+Hak Cipta (c) [2024] [M. Khoirul Risqi]
+
+Dengan ini, diizinkan secara cuma-cuma kepada siapa pun yang memperoleh salinan dari perangkat lunak ini dan file dokumentasinya (Perangkat Lunak), untuk berurusan dengan Perangkat Lunak tanpa batasan, termasuk hak tanpa batas untuk menggunakan, menyalin, mengubah, menggabungkan, menerbitkan, mendistribusikan, melisensikan ulang, dan/atau menjual salinan perangkat lunak, dan untuk mengizinkan orang-orang yang kepada siapa perangkat lunak ini disediakan untuk itu, tunduk pada ketentuan-ketentuan berikut:
+
+Pernyataan hak cipta di atas dan pemberitahuan izin ini harus dimasukkan dalam semua salinan atau bagian penting dari Perangkat Lunak.
+
+PERANGKAT LUNAK INI DISEDIAKAN "SEBAGAIMANA ADANYA", TANPA JAMINAN APA PUN, BAIK TERSURAT MAUPUN TERSIRAT, TERMASUK NAMUN TIDAK TERBATAS PADA JAMINAN DAGANG, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN TANPA PELANGGARAN. DALAM HAL APA PUN, PENULIS ATAU PEMEGANG HAK CIPTA TIDAK BERTANGGUNG JAWAB ATAS KLAIM, KERUSAKAN, ATAU KEWAJIBAN LAINNYA, BAIK DALAM TINDAKAN KONTRAK, KERUGIAN, ATAU HAL LAINNYA, YANG TIMBUL DARI, KELUAR DARI, ATAU DALAM HUBUNGAN DENGAN PERANGKAT LUNAK ATAU PENGGUNAAN ATAU HUBUNGAN LAIN DALAM PERANGKAT LUNAK.

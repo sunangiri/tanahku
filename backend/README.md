@@ -27,10 +27,10 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
-**Request**
+**Request:**
 ```json
 {
-    "username": "admin",
+    "username": "nailynafa",
     "password": "admin123"
 }
 ```
@@ -101,7 +101,7 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
-**Request**
+**Request:**
 ```json
 {
     "name": "naily nafa",
@@ -148,7 +148,7 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
-**Request**
+**Request:**
 ```json
 {
     "name": "naily nafa",

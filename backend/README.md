@@ -4,12 +4,12 @@ REST-API TANAHKU terintegrasi dengan smart contracts, dapat digunakan di blokcha
 
 ## Daftar Isi
 
-- [Environment Variables](##environment-variables)
-- [API Endpoints](##api-endpoints)
-- [Deployment](##deployment)
-- [Lisensi](##lisensi)
+- [Environment Variables](#environment-variables)
+- [API Endpoints](#api-endpoints)
+- [Deployment](#deployment)
+- [Lisensi](#licence)
 
-## Environment-Variables
+## Environment Variables
 
 Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file `.env` di direktori root proyek Anda dan tambahkan variabel-variabel berikut:
 

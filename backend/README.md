@@ -27,6 +27,14 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
+**Request**
+```json
+{
+    "username": "admin",
+    "password": "admin123"
+}
+```
+
 **Response:**
 
 - **Success (200)**
@@ -63,13 +71,13 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
     {
         "status": true,
         "message": {
-            "tokenId": "tokenId",
-            "name": "getMetadata.name",
-            "description": "getMetadata.description",
-            "image": "getMetadata.image",
-            "urlLocation": "getMetadata.urlLocation",
-            "creator": "getMetadata.creator",
-            "createdAt": "date"
+            "tokenId": "1",
+            "name": "naily nafa",
+            "description": "tanah 1 hektar dekat gor bojonegoro",
+            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+            "urlLocation": "Desa NgumpakDalem 14/03",
+            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+            "createdAt": "2024-05-07T11:23:48.000Z"
         }
     }
     ```
@@ -93,6 +101,16 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
+**Request**
+```json
+{
+    "name": "naily nafa",
+    "description": "tanah 1 hektar dekat gor bojonegoro",
+    "image": fileImages,
+    "urlLocation": "Desa NgumpakDalem 14/03",
+}
+```
+
 **Response:**
 
 - **Success (200)**
@@ -100,13 +118,13 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
     {
         "status": true,
         "message": {
-            "tokenId": "create",
-            "name": "getMetadata.name",
-            "description": "getMetadata.description",
-            "image": "getMetadata.image",
-            "urlLocation": "getMetadata.urlLocation",
-            "creator": "getMetadata.creator",
-            "createdAt": "date"
+            "tokenId": "1",
+            "name": "naily nafa",
+            "description": "tanah 1 hektar dekat gor bojonegoro",
+            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+            "urlLocation": "Desa NgumpakDalem 14/03",
+            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+            "createdAt": "2024-05-07T11:23:48.000Z"
         }
     }
     ```
@@ -130,6 +148,16 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 
 **Method:** POST
 
+**Request**
+```json
+{
+    "name": "naily nafa",
+    "description": "tanah 2 hektar dekat gor bojonegoro",
+    "image": fileImages,
+    "urlLocation": "Desa NgumpakDalem 014/003",
+}
+```
+
 **Response:**
 
 - **Success (200)**
@@ -137,13 +165,13 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
     {
         "status": true,
         "message": {
-            "tokenId": "idx",
-            "name": "getMetadata.name",
-            "description": "getMetadata.description",
-            "image": "getMetadata.image",
-            "urlLocation": "getMetadata.urlLocation",
-            "creator": "getMetadata.creator",
-            "createdAt": "date"
+            "tokenId": "1",
+            "name": "naily nafa",
+            "description": "tanah 2 hektar dekat gor bojonegoro",
+            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+            "urlLocation": "Desa NgumpakDalem 014/003",
+            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+            "createdAt": "2024-05-07T11:23:48.000Z"
         }
     }
     ```

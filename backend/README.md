@@ -256,7 +256,6 @@ docker run -dp 80:3000 --name tanahku tanahku:latest
 
 ## LICENSE
 
-Berikut adalah contoh isi file LICENSE menggunakan MIT License:
 
 ```plaintext
 MIT License

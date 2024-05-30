@@ -7,7 +7,7 @@ REST-API TANAHKU terintegrasi dengan smart contracts, dapat digunakan di blokcha
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
 - [Deployment](#deployment)
-- [Lisensi](#licence)
+- [Lisensi](#license)
 
 ## Environment Variables
 

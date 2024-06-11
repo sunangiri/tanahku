@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'GeneratePdf.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -17,9 +16,8 @@ Host link = Host();
 final hostApi = link.host;
 
 class _AddPageState extends State<AddPage> {
-  final String apiUrl = '$hostApi/add';
+  final apiUrl = '$hostApi/add';
   bool _isLoading = false;
-
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _urlLocationController;
@@ -40,7 +38,6 @@ class _AddPageState extends State<AddPage> {
     String? username = prefs.getString('username');
 
     if (username == null || username.isEmpty) {
-      // Redirect user to login page if username is empty or null
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Login()),
@@ -61,28 +58,26 @@ class _AddPageState extends State<AddPage> {
     required String name,
     required String description,
     required String urlLocation,
+    required String tokenJWT,
   }) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final tokenJWT = prefs.getString('tokenJWT');
-
       var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-      request.headers['Authorization'] = 'Bearer $tokenJWT';
+      request.headers['Authorization'] =
+          'Bearer $tokenJWT'; // Set Authorization header
       request.fields.addAll({
         'name': name,
         'description': description,
-        'Alamat': urlLocation,
+        'urlLocation': urlLocation,
       });
 
       var image = await http.MultipartFile.fromPath('file', imageFile.path);
       request.files.add(image);
 
       var streamedResponse = await request.send();
-
       var response = await http.Response.fromStream(streamedResponse);
       final jsonData = jsonDecode(response.body);
 
@@ -117,10 +112,8 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Menambahkan Scaffold
       appBar: AppBar(
-        // Menambahkan AppBar
-        title: Text('Tampah Sertifikat'), // Judul AppBar
+        title: Text('Tambah Sertifikat'),
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -163,13 +156,16 @@ class _AddPageState extends State<AddPage> {
                       String name = _nameController.text;
                       String description = _descriptionController.text;
                       String urlLocation = _urlLocationController.text;
-
-                      if (_imageFile != null) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? tokenJWT = prefs.getString('tokenJWT');
+                      if (_imageFile != null && tokenJWT != null) {
                         await _sendData(
                           imageFile: _imageFile!,
                           name: name,
                           description: description,
                           urlLocation: urlLocation,
+                          tokenJWT: tokenJWT,
                         );
                       }
                     },
@@ -180,7 +176,7 @@ class _AddPageState extends State<AddPage> {
             if (_responseData != null && !_isLoading)
               ElevatedButton(
                 onPressed: () {
-                  GeneratePdf(_responseData!);
+                  // Do something
                 },
                 child: Text('Cetak Sertifikat'),
               ),

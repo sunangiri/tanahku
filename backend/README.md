@@ -1,13 +1,12 @@
-# REST API TANAHKU
+## Dokumentasi API Tanahku
 
-REST-API TANAHKU terintegrasi dengan smart contracts, dapat digunakan di blokchain EVM.
-
-## Daftar Isi
+### Daftar Isi
 
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
 - [Deployment](#deployment)
-- [Lisensi](#license)
+
+---
 
 ## Environment Variables
 
@@ -21,6 +20,8 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 | HOST        | -                                      |
 | PORT        | -                                      |
 
+---
+
 ## API Endpoints
 
 ### `/login`
@@ -28,168 +29,189 @@ Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file
 **Method:** POST
 
 **Request:**
-```json
-{
-    "username": "nailynafa",
-    "password": "admin123"
-}
+```bash
+curl -X POST "http://localhost:PORT/login" -H "Content-Type: application/json" -d '{"username": "nailynafa", "password": "admin123"}'
 ```
 
 **Response:**
 
 - **Success (200)**
-    ```json
-    {
-        "status": true,
-        "token": "xxxxxxx",
-        "username": "nailynafa"
-    }
-    ```
+  ```json
+  {
+      "status": true,
+      "token": "xxxxxxx",
+      "username": "nailynafa"
+  }
+  ```
+
 - **Failed (200)**
-    ```json
-    {
-        "status": false,
-        "message": "Invalid username or password."
-    }
-    ```
+  ```json
+  {
+      "status": false,
+      "message": "Invalid username or password."
+  }
+  ```
+
 - **Error (500)**
-    ```json
-    {
-        "status": false,
-        "error": "error.message"
-    }
-    ```
+  ```json
+  {
+      "status": false,
+      "error": "error.message"
+  }
+  ```
+
+---
 
 ### `/data/:id`
 
 **Method:** GET
 
+**Request:**
+```bash
+curl -X GET "http://localhost:PORT/data/ID" -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
 **Response:**
 
 - **Success (200)**
-    ```json
-    {
-        "status": true,
-        "message": {
-            "tokenId": "1",
-            "name": "naily nafa",
-            "description": "tanah 1 hektar dekat gor bojonegoro",
-            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
-            "urlLocation": "Desa NgumpakDalem 14/03",
-            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
-            "createdAt": "2024-05-07T11:23:48.000Z"
-        }
-    }
-    ```
+  ```json
+  {
+      "status": true,
+      "message": {
+          "tokenId": "1",
+          "name": "naily nafa",
+          "description": "tanah 1 hektar dekat gor bojonegoro",
+          "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+          "urlLocation": "Desa NgumpakDalem 14/03",
+          "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+          "createdAt": "2024-05-07T11:23:48.000Z"
+      }
+  }
+  ```
+
 - **Error (500)**
-    ```json
-    {
-        "status": false,
-        "message": "Error add data"
-    }
-    ```
-    or
-    ```json
-    {
-        "status": false,
-        "message": "Internal server error",
-        "error": "error"
-    }
-    ```
+  ```json
+  {
+      "status": false,
+      "message": "Error add data"
+  }
+  ```
+
+  atau
+
+  ```json
+  {
+      "status": false,
+      "message": "Internal server error",
+      "error": "error"
+  }
+  ```
+
+---
 
 ### `/add`
 
 **Method:** POST
 
 **Request:**
-```json
-{
+```bash
+curl -X POST "http://localhost:PORT/add" -H "Authorization: Bearer YOUR_JWT_TOKEN" -H "Content-Type: application/json" -d '{
     "name": "naily nafa",
     "description": "tanah 1 hektar dekat gor bojonegoro",
-    "image": fileImages,
-    "urlLocation": "Desa NgumpakDalem 14/03",
-}
+    "image": "path/to/image.jpg",
+    "urlLocation": "Desa NgumpakDalem 14/03"
+}'
 ```
 
 **Response:**
 
 - **Success (200)**
-    ```json
-    {
-        "status": true,
-        "message": {
-            "tokenId": "1",
-            "name": "naily nafa",
-            "description": "tanah 1 hektar dekat gor bojonegoro",
-            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
-            "urlLocation": "Desa NgumpakDalem 14/03",
-            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
-            "createdAt": "2024-05-07T11:23:48.000Z"
-        }
-    }
-    ```
+  ```json
+  {
+      "status": true,
+      "message": {
+          "tokenId": "1",
+          "name": "naily nafa",
+          "description": "tanah 1 hektar dekat gor bojonegoro",
+          "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+          "urlLocation": "Desa NgumpakDalem 14/03",
+          "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+          "createdAt": "2024-05-07T11:23:48.000Z"
+      }
+  }
+  ```
+
 - **Error (500)**
-    ```json
-    {
-        "status": false,
-        "message": "Error add data"
-    }
-    ```
-    or
-    ```json
-    {
-        "status": false,
-        "message": "Internal server error",
-        "error": "error"
-    }
-    ```
+  ```json
+  {
+      "status": false,
+      "message": "Error add data"
+  }
+  ```
+
+  atau
+
+  ```json
+  {
+      "status": false,
+      "message": "Internal server error",
+      "error": "error"
+  }
+  ```
+
+---
 
 ### `/update/:id`
 
 **Method:** POST
 
 **Request:**
-```json
-{
+```bash
+curl -X POST "http://localhost:PORT/update/ID" -H "Authorization: Bearer YOUR_JWT_TOKEN" -H "Content-Type: application/json" -d '{
     "name": "naily nafa",
     "description": "tanah 2 hektar dekat gor bojonegoro",
-    "image": fileImages,
+    "image": "path/to/image.jpg",
     "urlLocation": "Desa NgumpakDalem 014/003",
-}
+}'
 ```
 
 **Response:**
 
 - **Success (200)**
-    ```json
-    {
-        "status": true,
-        "message": {
-            "tokenId": "1",
-            "name": "naily nafa",
-            "description": "tanah 2 hektar dekat gor bojonegoro",
-            "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
-            "urlLocation": "Desa NgumpakDalem 014/003",
-            "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
-            "createdAt": "2024-05-07T11:23:48.000Z"
-        }
-    }
-    ```
+  ```json
+  {
+      "status": true,
+      "message": {
+          "tokenId": "1",
+          "name": "naily nafa",
+          "description": "tanah 2 hektar dekat gor bojonegoro",
+          "image": "https://ipfs.io/ipfs/QmYWHNK9oPSvv2cydLzjLosYNsp2tADyPWJLKUmPa14XBN",
+          "urlLocation": "Desa NgumpakDalem 014/003",
+          "creator": "0x714Cb1145218871fAebD55de36dBE7053cc9C74d",
+          "createdAt": "2024-05-07T11:23:48.000Z"
+      }
+  }
+  ```
+
 - **Error (500)**
-    ```json
-    {
-        "status": false,
-        "message": "Error add data"
-    }
-    ```
-    or
-    ```json
-    {
-        "status": false,
-        "message": "Internal server error",
-        "error": "error"
-    }
-    ```
+  ```json
+  {
+      "status": false,
+      "message": "Error add data"
+  }
+  ```
+
+  atau
+
+  ```json
+  {
+      "status": false,
+      "message": "Internal server error",
+      "error": "error"
+  }
+  ```
+
+---
 
 ## Deployment
 
@@ -254,17 +276,17 @@ FROM node:18
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
+# Copy package files dan install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of aplikasi code
 COPY . .
 
-# Expose the port the app runs on
+# Expose port app runs on
 EXPOSE 3000
 
-# Command to run the application
+# Command to run the aplikasi
 CMD ["node", "server.js"]
 ```
 
@@ -282,16 +304,4 @@ Jalankan kontainer dari image yang baru saja Anda bangun. Mappkan port 80 di hos
 docker run -dp 80:3000 --name tanahku tanahku:latest
 ```
 
-## LICENSE
-
-
-```plaintext
-MIT License
-
-Hak Cipta (c) [2024] [M. Khoirul Risqi]
-
-Dengan ini, diizinkan secara cuma-cuma kepada siapa pun yang memperoleh salinan dari perangkat lunak ini dan file dokumentasinya (Perangkat Lunak), untuk berurusan dengan Perangkat Lunak tanpa batasan, termasuk hak tanpa batas untuk menggunakan, menyalin, mengubah, menggabungkan, menerbitkan, mendistribusikan, melisensikan ulang, dan/atau menjual salinan perangkat lunak, dan untuk mengizinkan orang-orang yang kepada siapa perangkat lunak ini disediakan untuk itu, tunduk pada ketentuan-ketentuan berikut:
-
-Pernyataan hak cipta di atas dan pemberitahuan izin ini harus dimasukkan dalam semua salinan atau bagian penting dari Perangkat Lunak.
-
-PERANGKAT LUNAK INI DISEDIAKAN "SEBAGAIMANA ADANYA", TANPA JAMINAN APA PUN, BAIK TERSURAT MAUPUN TERSIRAT, TERMASUK NAMUN TIDAK TERBATAS PADA JAMINAN DAGANG, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN TANPA PELANGGARAN. DALAM HAL APA PUN, PENULIS ATAU PEMEGANG HAK CIPTA TIDAK BERTANGGUNG JAWAB ATAS KLAIM, KERUSAKAN, ATAU KEWAJIBAN LAINNYA, BAIK DALAM TINDAKAN KONTRAK, KERUGIAN, ATAU HAL LAINNYA, YANG TIMBUL DARI, KELUAR DARI, ATAU DALAM HUBUNGAN DENGAN PERANGKAT LUNAK ATAU PENGGUNAAN ATAU HUBUNGAN LAIN DALAM PERANGKAT LUNAK.
+---

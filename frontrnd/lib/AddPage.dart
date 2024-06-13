@@ -8,46 +8,41 @@ import 'Host.dart';
 import 'Login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UpdatePage extends StatefulWidget {
+class AddPage extends StatefulWidget {
   @override
-  _UpdatePageState createState() => _UpdatePageState();
+  _AddPageState createState() => _AddPageState();
 }
 
 Host link = Host();
 final hostApi = link.host;
 
-class _UpdatePageState extends State<UpdatePage> {
-  final String apiUrl = '$hostApi/update/';
+class _AddPageState extends State<AddPage> {
+  final String apiUrl = '$hostApi/add';
   bool _isLoading = false;
-  bool _isSubmitted = false;
-
-  late TextEditingController _idController;
+  Map<String, dynamic>? _responseData;
+  File? _imageFile;
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
   late TextEditingController _urlLocationController;
-  File? _imageFile;
-  Map<String, dynamic>? _responseData;
 
   @override
   void initState() {
     super.initState();
-    _idController = TextEditingController();
     _nameController = TextEditingController();
     _descriptionController = TextEditingController();
     _urlLocationController = TextEditingController();
-    checkLoginStatus();
+    _checkLoginStatus();
   }
 
   @override
   void dispose() {
-    _idController.dispose();
     _nameController.dispose();
     _descriptionController.dispose();
     _urlLocationController.dispose();
     super.dispose();
   }
 
-  void checkLoginStatus() async {
+  void _checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? tokenJWT = prefs.getString('tokenJWT');
 
@@ -59,8 +54,16 @@ class _UpdatePageState extends State<UpdatePage> {
     }
   }
 
+  Future<File?> _getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    }
+    return null;
+  }
+
   Future<void> _sendData({
-    required String id,
     required File imageFile,
     required String name,
     required String description,
@@ -71,7 +74,7 @@ class _UpdatePageState extends State<UpdatePage> {
     });
 
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl + id));
+      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tokenJWT = prefs.getString('tokenJWT');
       request.headers['Authorization'] = 'Bearer $tokenJWT';
@@ -87,145 +90,105 @@ class _UpdatePageState extends State<UpdatePage> {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-      final jsonData = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _responseData = jsonData['message'];
-          _isSubmitted = true;
-          _idController.text = '';
-          _nameController.text = '';
-          _descriptionController.text = '';
-          _urlLocationController.text = '';
-          _imageFile = null;
-        });
-        print('Data sent successfully!');
-      } else {
-        print('Failed to send data. Status code: ${response.statusCode}');
-        print(response.body);
-      }
+      _processResponse(response);
     } catch (e) {
-      print('Error: $e');
-    } finally {
       setState(() {
+        _responseData = {'error': e.toString()};
         _isLoading = false;
       });
+      print('Error: $e');
     }
   }
 
-  Future<File?> _getImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    }
-    return null;
+  void _processResponse(http.Response response) {
+    final jsonData = jsonDecode(response.body);
+
+    setState(() {
+      if (response.statusCode == 200) {
+        _responseData = jsonData;
+      } else {
+        _responseData = {'error': jsonData};
+      }
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ubah Sertifikat'),
+        title: Text('Tambah Sertifikat'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (!_isSubmitted)
-              Column(
-                children: [
-                  TextFormField(
-                    controller: _idController,
-                    decoration: InputDecoration(labelText: 'ID'),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _isSubmitted = true;
-                      });
-                    },
-                    child: Text('Submit ID'),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Nama'),
               ),
-            if (_isSubmitted)
-              Column(
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Name'),
-                  ),
-                  SizedBox(height: 16.0),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(labelText: 'Description'),
-                  ),
-                  SizedBox(height: 16.0),
-                  TextFormField(
-                    controller: _urlLocationController,
-                    decoration: InputDecoration(labelText: 'Alamat'),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      final imageFile = await _getImage();
-                      if (imageFile != null) {
-                        setState(() {
-                          _imageFile = imageFile;
-                        });
-                      }
-                    },
-                    icon: Icon(_imageFile != null ? Icons.check : Icons.image),
-                    label: Text(
-                        _imageFile != null ? 'Image Selected' : 'Select Image'),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () async {
-                            String id = _idController.text;
-                            String name = _nameController.text;
-                            String description = _descriptionController.text;
-                            String urlLocation = _urlLocationController.text;
+              SizedBox(height: 16.0),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: InputDecoration(labelText: 'Deskripsi'),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                controller: _urlLocationController,
+                decoration: InputDecoration(labelText: 'Alamat'),
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final imageFile = await _getImage();
+                  if (imageFile != null) {
+                    setState(() {
+                      _imageFile = imageFile;
+                    });
+                  }
+                },
+                icon: Icon(_imageFile != null ? Icons.check : Icons.image),
+                label: Text(
+                    _imageFile != null ? 'Gambar dipilih' : 'Pilih Gambar'),
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        String name = _nameController.text;
+                        String description = _descriptionController.text;
+                        String urlLocation = _urlLocationController.text;
 
-                            if (_imageFile != null) {
-                              await _sendData(
-                                id: id,
-                                imageFile: _imageFile!,
-                                name: name,
-                                description: description,
-                                urlLocation: urlLocation,
-                              );
-                            }
-                          },
-                    child: Text('Submit'),
-                  ),
-                  SizedBox(height: 16.0),
-                  if (_isLoading) CircularProgressIndicator(),
-                ],
+                        if (_imageFile != null) {
+                          await _sendData(
+                            imageFile: _imageFile!,
+                            name: name,
+                            description: description,
+                            urlLocation: urlLocation,
+                          );
+                        }
+                      },
+                child: Text('Kirim'),
               ),
-            if (_responseData != null && !_isLoading)
-              ElevatedButton(
-                onPressed: () {
-                  GeneratePdf(_responseData!);
-                },
-                child: Text('Cetak Sertifikat'),
-              ),
-            if (_isSubmitted)
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isSubmitted = false;
-                    _responseData = null;
-                  });
-                },
-                child: Text('Reset'),
-              ),
-          ],
+              if (_isLoading) CircularProgressIndicator(),
+              if (_responseData != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (_responseData!.containsKey('message'))
+                      ElevatedButton(
+                        onPressed: () {
+                          GeneratePdf(_responseData!['message']!);
+                        },
+                        child: Text('Cetak Sertifikat'),
+                      ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,23 +2,40 @@
 
 ### Daftar Isi
 
+- [Penjelasan](#penjelasan)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
 - [Deployment](#deployment)
 
 ---
 
+## Penjelasan
+
+API Tanahku menerima data dan gambar melalui request ke backend. Gambar diproses oleh Multer dan disimpan sementara di direktori `uploads`. Selanjutnya, gambar diunggah ke Pinata, sebuah platform untuk IPFS yang memungkinkan penyimpanan terdesentralisasi. Setelah berhasil diunggah, Pinata mengembalikan `IpfsHash` yang disimpan dalam variabel Node.js. Data dari frontend, termasuk `IpfsHash`, disimpan dalam metadata NFT di smart contract. API backend kemudian mengirimkan respons yang sesuai.
+
+## Install Dev and Run
+
+### Instal Dependensi
+```
+npm install
+```
+
+### Menjalankan Server
+```
+node server.js
+```
+
 ## Environment Variables
 
 Untuk menjalankan proyek ini, Anda perlu mengatur variabel lingkungan. Buat file `.env` di direktori root proyek Anda dan tambahkan variabel-variabel berikut:
 
-| Variable    | Value                                  |
-|-------------|----------------------------------------|
-| PINATA_JWT  | [pinata](https://www.pinata.cloud/)    |
-| JWT_SECRET  | risqiganteng                           |
-| PRIVATE_KEY | [MetaMask](https://metamask.io/)       |
-| HOST        | -                                      |
-| PORT        | -                                      |
+| Variable    | Deskripsi                               |
+|-------------|-----------------------------------------|
+| PINATA_JWT  | JWT dari [Pinata](https://www.pinata.cloud/)   |
+| JWT_SECRET  | Rahasia JWT (misal: `risqiganteng`)     |
+| PRIVATE_KEY | Kunci pribadi dari [MetaMask](https://metamask.io/) |
+| HOST        | Host aplikasi (misal: `localhost`)      |
+| PORT        | Port aplikasi (misal: `3000`)           |
 
 ---
 
@@ -93,17 +110,7 @@ curl -X GET "http://localhost:PORT/data/ID" -H "Authorization: Bearer YOUR_JWT_T
   ```json
   {
       "status": false,
-      "message": "Error add data"
-  }
-  ```
-
-  atau
-
-  ```json
-  {
-      "status": false,
-      "message": "Internal server error",
-      "error": "error"
+      "message": "Error retrieving data"
   }
   ```
 
@@ -145,17 +152,7 @@ curl -X POST "http://localhost:PORT/add" -H "Authorization: Bearer YOUR_JWT_TOKE
   ```json
   {
       "status": false,
-      "message": "Error add data"
-  }
-  ```
-
-  atau
-
-  ```json
-  {
-      "status": false,
-      "message": "Internal server error",
-      "error": "error"
+      "message": "Error adding data"
   }
   ```
 
@@ -171,7 +168,7 @@ curl -X POST "http://localhost:PORT/update/ID" -H "Authorization: Bearer YOUR_JW
     "name": "naily nafa",
     "description": "tanah 2 hektar dekat gor bojonegoro",
     "image": "path/to/image.jpg",
-    "urlLocation": "Desa NgumpakDalem 014/003",
+    "urlLocation": "Desa NgumpakDalem 014/003"
 }'
 ```
 
@@ -197,17 +194,7 @@ curl -X POST "http://localhost:PORT/update/ID" -H "Authorization: Bearer YOUR_JW
   ```json
   {
       "status": false,
-      "message": "Error add data"
-  }
-  ```
-
-  atau
-
-  ```json
-  {
-      "status": false,
-      "message": "Internal server error",
-      "error": "error"
+      "message": "Error updating data"
   }
   ```
 
@@ -218,15 +205,13 @@ curl -X POST "http://localhost:PORT/update/ID" -H "Authorization: Bearer YOUR_JW
 ### Langkah 1: Instal Docker
 
 #### 1. Perbarui Repositori Paket
-Perbarui daftar paket di sistem Anda untuk memastikan Anda mendapatkan versi terbaru dari paket-paket yang diperlukan.
-
+Perbarui daftar paket di sistem Anda untuk memastikan mendapatkan versi terbaru dari paket-paket yang diperlukan.
 ```bash
 sudo apt-get update
 ```
 
 #### 2. Instal Dependensi yang Diperlukan
 Instal beberapa paket pendukung yang diperlukan oleh Docker.
-
 ```bash
 sudo apt-get install -y \
     ca-certificates \
@@ -237,7 +222,6 @@ sudo apt-get install -y \
 
 #### 3. Tambahkan GPG Key Resmi Docker
 Buat direktori untuk menyimpan kunci GPG dan tambahkan kunci GPG resmi Docker.
-
 ```bash
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -245,21 +229,18 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 
 #### 4. Tambahkan Docker APT Repository
 Tambahkan repository Docker ke sumber APT Anda.
-
 ```bash
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
 #### 5. Perbarui Kembali Repositori Paket
 Perbarui kembali daftar paket setelah menambahkan repository Docker.
-
 ```bash
 sudo apt-get update
 ```
 
 #### 6. Instal Docker Engine
 Instal Docker Engine, containerd, dan Docker Compose.
-
 ```bash
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
@@ -292,14 +273,14 @@ CMD ["node", "server.js"]
 
 #### 2. Bangun Image Docker
 Bangun image Docker Anda dengan nama `tanahku` dan tag `latest`.
-
 ```bash
 docker build -t tanahku:latest .
 ```
 
 #### 3. Jalankan Kontainer Docker
-Jalankan kontainer dari image yang baru saja Anda bangun. Mappkan port 80 di host ke port 3000 di kontainer. Berikan nama `tanahku` pada kontainer untuk mempermudah pengelolaan.
+Jalankan kontainer dari image yang baru saja Anda bangun. Map port 80 di host ke port 3000 di kontainer. Berikan nama `tanahku` pada kontainer untuk
 
+ mempermudah pengelolaan.
 ```bash
 docker run -dp 80:3000 --name tanahku tanahku:latest
 ```
